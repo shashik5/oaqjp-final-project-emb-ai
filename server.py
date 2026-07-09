@@ -14,18 +14,27 @@ def sent_analyzer():
     function. The output returned shows the emotions and the
     dominant emotion for the provided text.
     """
+    # Retrieve the text to analyze from the request arguments
     text_to_analyze = request.args.get('textToAnalyze')
+
+    # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyze)
+
+    # Extract the individual emotions from the response
     anger = response['anger']
     disgust = response['disgust']
     fear = response['fear']
     joy = response['joy']
     sadness = response['sadness']
+
+    # Extract the dominant emotion from the response
     dominant_emotion = response['dominant_emotion']
 
+    # Return an error message if dominant_emotion is None
     if dominant_emotion is None:
         return "Invalid text! Please try again!"
 
+    # Return the formatted response with all emotions and dominant emotion
     return (
         f"For the given statement, the system response is "
         f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, "
