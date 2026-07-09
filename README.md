@@ -1,4 +1,7 @@
-# Emotion Detector
+# Final Project: Emotion Detector
+
+## Project Name
+**Final Project** — oaqjp-final-project-emb-ai
 
 ## Project Overview
 An AI-based web application for detecting emotions in text using the **IBM Watson NLP** library. Built with Python and Flask, this application analyzes input text and returns emotion scores for anger, disgust, fear, joy, and sadness — along with the dominant emotion.
