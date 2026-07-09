@@ -1,51 +1,44 @@
-"""
-Flask web server for the Emotion Detector application.
-"""
-from flask import Flask, request, render_template
+"""Executing the Flask application for Emotion Detection."""
+from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def render_index():
-    """Render the main index page."""
-    return render_template('index.html')
+@app.route("/emotionDetector")
+def sent_analyzer():
+    """Receive the text from the HTML interface and run emotion analysis.
 
-
-@app.route('/emotionDetector')
-def emotion_detector_route():
+    This code receives the text from the HTML interface and
+    runs emotion analysis over it using emotion_detector()
+    function. The output returned shows the emotions and the
+    dominant emotion for the provided text.
     """
-    Handle emotion detection requests.
+    text_to_analyze = request.args.get('textToAnalyze')
+    response = emotion_detector(text_to_analyze)
+    anger = response['anger']
+    disgust = response['disgust']
+    fear = response['fear']
+    joy = response['joy']
+    sadness = response['sadness']
+    dominant_emotion = response['dominant_emotion']
 
-    Query Parameters:
-        textToAnalyze (str): The text to analyze for emotions.
-
-    Returns:
-        str: A formatted string with emotion scores and dominant emotion,
-             or an error message for blank input.
-    """
-    text_to_analyze = request.args.get('textToAnalyze', '')
-
-    result = emotion_detector(text_to_analyze)
-
-    if result['dominant_emotion'] is None:
-        return 'Invalid text! Please try again.'
-
-    anger = result['anger']
-    disgust = result['disgust']
-    fear = result['fear']
-    joy = result['joy']
-    sadness = result['sadness']
-    dominant_emotion = result['dominant_emotion']
+    if dominant_emotion is None:
+        return "Invalid text! Please try again!"
 
     return (
         f"For the given statement, the system response is "
         f"'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, "
-        f"'joy': {joy} and 'sadness': {sadness}. "
-        f"The dominant emotion is <b>{dominant_emotion}</b>."
+        f"'joy': {joy} and 'sadness': {sadness}. The "
+        f"dominant emotion is {dominant_emotion}."
     )
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050, debug=True)
+@app.route("/")
+def render_index_page():
+    """Initiate the rendering of the main application page over the Flask channel."""
+    return render_template('index.html')
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
